@@ -4,10 +4,14 @@
         $userEmail = $_SESSION['email'];
         $userData = file_get_contents("userdetails.json");
         $userInfo = json_decode($userData,true);
+
+        // Logout
         if(isset($_POST['logout'])){
             session_destroy();
             header("location:index.php");
         }
+
+        // Update profile
         if(isset($_POST['update'])){
             $userInfo[$userEmail]['name'] = $_POST['name'];
             $userInfo[$userEmail]['role'] = $_POST['role'];
@@ -16,6 +20,8 @@
             $userData = file_get_contents("userdetails.json");
             $userInfo = json_decode($userData,true);
         }
+        
+        //Fetching Data
         foreach ($userInfo as $email => $info) {
             if($userEmail == $email){
                 $userName = $info['name'];
