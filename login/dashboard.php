@@ -1,3 +1,33 @@
+<?php
+    session_start();
+    if(isset($_SESSION['email'])){
+        $userEmail = $_SESSION['email'];
+        $userData = file_get_contents("userdetails.json");
+        $userInfo = json_decode($userData,true);
+        if(isset($_POST['update'])){
+            $userInfo[$userEmail]['name'] = $_POST['name'];
+            $userInfo[$userEmail]['role'] = $_POST['role'];
+            $newJsonString = json_encode($userInfo, JSON_PRETTY_PRINT);
+            file_put_contents('userdetails.json', $newJsonString);
+            $userData = file_get_contents("userdetails.json");
+            $userInfo = json_decode($userData,true);
+        }
+        foreach ($userInfo as $email => $info) {
+            if($userEmail == $email){
+                $userName = $info['name'];
+                $role = $info['role'];
+                $projects = $info['projects'];
+                $tasks = $info['tasks'];
+                $completed = $info['completed'];
+                break;
+            }
+        }
+        
+        //print_r($userInfo);
+    }else{
+        header("location:index.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,7 +128,7 @@
             <!-- Main Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
                 <div class="container mx-auto px-6 py-8">
-                    <h2 class="text-3xl font-semibold text-gray-800 mb-6">Welcome back, Jane Doe!</h2>
+                    <h2 class="text-3xl font-semibold text-gray-800 mb-6">Welcome back, <?php echo $userName; ?>!</h2>
                     
                     <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
                         <div class="bg-white shadow rounded-lg p-4">
@@ -114,7 +144,7 @@
                                     </svg>
                                 </div>
                                 <div class="mx-5">
-                                    <h4 class="text-2xl font-semibold text-gray-700">12</h4>
+                                    <h4 class="text-2xl font-semibold text-gray-700"><?php echo $projects; ?></h4>
                                     <div class="text-gray-500">Projects</div>
                                 </div>
                             </div>
@@ -129,7 +159,7 @@
                                     </svg>
                                 </div>
                                 <div class="mx-5">
-                                    <h4 class="text-2xl font-semibold text-gray-700">24</h4>
+                                    <h4 class="text-2xl font-semibold text-gray-700"><?php echo $tasks; ?></h4>
                                     <div class="text-gray-500">Tasks</div>
                                 </div>
                             </div>
@@ -143,7 +173,7 @@
                                     </svg>
                                 </div>
                                 <div class="mx-5">
-                                    <h4 class="text-2xl font-semibold text-gray-700">89%</h4>
+                                    <h4 class="text-2xl font-semibold text-gray-700"><?php echo $completed; ?>%</h4>
                                     <div class="text-gray-500">Completed</div>
                                 </div>
                             </div>
@@ -152,21 +182,24 @@
 
                     <div class="bg-white shadow rounded-lg p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-4">Profile Information</h3>
-                        <div class="grid gap-6 mb-6 md:grid-cols-2">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                                <input type="text" value="Jane Doe" readonly class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none">
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+                            <div class="grid gap-6 mb-6 md:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                    <input type="text" name="name" value="<?php echo $userName; ?>"  class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                    <input type="email" name="email" value="<?php echo $userEmail; ?>" readonly  class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                                    <input type="text" name="role" value="<?php echo $role; ?>"  class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none">
+                                </div>
+                                <input type="hidden" name="update" value="yes">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                                <input type="email" value="jane.doe@example.com" readonly class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                                <input type="text" value="Software Engineer" readonly class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none">
-                            </div>
-                        </div>
-                        <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Update Profile</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Update Profile</button>
+                        </form>
                     </div>
                 </div>
             </main>

@@ -41,7 +41,7 @@
     <main class="flex-grow flex items-center justify-center px-4 py-12">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <h2 id="formTitle" class="text-2xl font-bold mb-6 text-center text-gray-800">Login to Your Account</h2>
-            <form id="loginForm" target="/" method="POST">
+            <form id="loginForm" target="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <?php if($loginError == true): ?>
                     <div class="text-red-600 text-center text-2xl">
                         Username or Password is incorrect.

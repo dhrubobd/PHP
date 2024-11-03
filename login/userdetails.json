@@ -1,0 +1,23 @@
+{
+    "jhondoe@gmail.com": {
+        "name": "John Doe",
+        "role": "HR HEAD",
+        "projects": 23,
+        "tasks": 10,
+        "completed": 89
+    },
+    "jimmy@yahoo.com": {
+        "name": "Jimmy",
+        "role": "IT Tech",
+        "projects": 22,
+        "tasks": 13,
+        "completed": 79
+    },
+    "luke@luke.ca": {
+        "name": "Luke Kalyan Brata Sarker",
+        "role": "IT HEAD",
+        "projects": 29,
+        "tasks": 13,
+        "completed": 99
+    }
+}
