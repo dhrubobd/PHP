@@ -1,3 +1,28 @@
+<?php
+    //print_r($_POST);
+    $loginError = false;
+
+    if(isset($_POST['email'])){
+        $submittedUserEmail = $_POST['email'];
+        $submittedPassword = $_POST['password'];
+        $userData = file_get_contents("users.json"); // Getting User Data From users.json file
+        $users = json_decode($userData,true); // Converting JSON Data into Array
+        //echo $submittedUserEmail.PHP_EOL;
+        //echo $submittedPassword.PHP_EOL;
+        //print_r($users);
+        foreach ($users as $email => $password) {
+            if(($submittedUserEmail == $email)&&($submittedPassword == $password)){
+                session_start();
+                $_SESSION['email']= $email;
+                header("location:dashboard.php");
+                //echo $email . " " . $password.PHP_EOL;
+                exit();
+            }
+        }
+        $loginError = true;
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +32,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-100">
-    <header class="bg-blue-600 text-white p-4">
+    <header class="bg-violet-600 text-white p-4">
         <div class="container mx-auto">
-            <h1 class="text-xl font-semibold">PHP Login using JSON Data and Session</h1>
+            <h1 class="text-xl font-semibold text-center">PHP Login using JSON Data and Session</h1>
         </div>
     </header>
 
     <main class="flex-grow flex items-center justify-center px-4 py-12">
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <h2 id="formTitle" class="text-2xl font-bold mb-6 text-center text-gray-800">Login to Your Account</h2>
-            <form id="loginForm">
+            <form id="loginForm" target="/" method="POST">
+                <?php if($loginError == true): ?>
+                    <div class="text-red-600 text-center text-2xl">
+                        Username or Password is incorrect.
+                    </div>
+                <?php endif; ?>
                 <div class="mb-4">
                     <label for="loginEmail" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
                     <input type="email" id="loginEmail" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -29,7 +59,7 @@
                     <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                     <label for="remember" class="ml-2 block text-sm text-gray-900">Remember me</label>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Sign In</button>
+                <button type="submit" class="w-full bg-violet-600 text-white p-3 rounded-md font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Sign In</button>
             </form>
             <form id="registerForm" class="hidden">
                 <div class="mb-4">
@@ -48,7 +78,7 @@
                     <label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Register</button>
+                <button type="submit" class="w-full bg-violet-600 text-white p-3 rounded-md font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Register</button>
             </form>
             <div class="mt-4 text-center">
                 <a href="#" id="forgotPassword" class="text-sm text-blue-600 hover:underline">Forgot your password?</a>
@@ -60,7 +90,7 @@
     </main>
 
     <footer class="bg-gray-200 text-center p-4">
-        <p class="text-gray-600 text-sm">&copy; 2023 My App. All rights reserved.</p>
+        <p class="text-gray-600 text-sm">&copy; 2024 My App. All rights reserved.</p>
     </footer>
 
     <script>
@@ -86,7 +116,7 @@
                 forgotPasswordLink.classList.add('hidden');
             }
         });
-
+        /*
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             // Add login logic here
@@ -98,6 +128,7 @@
             // Add registration logic here
             console.log('Registration submitted');
         });
+        */
     </script>
 </body>
 </html>
