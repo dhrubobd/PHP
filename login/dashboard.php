@@ -20,7 +20,7 @@
             $userData = file_get_contents("userdetails.json");
             $userInfo = json_decode($userData,true);
         }
-        
+
         //Fetching Data
         foreach ($userInfo as $email => $info) {
             if($userEmail == $email){
@@ -43,7 +43,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>Dashboard of <?php echo $userName; ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
